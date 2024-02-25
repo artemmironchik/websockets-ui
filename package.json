@@ -15,7 +15,6 @@
         "nodemon": "^2.0.16"
     },
     "dependencies": {
-        "@types/node": "^20.11.20",
         "@types/ws": "^8.5.10",
         "dotenv": "^16.4.5",
         "ts-node": "^10.9.2",

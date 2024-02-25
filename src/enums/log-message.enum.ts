@@ -3,4 +3,4 @@ export enum LogMessage {
   PLAYER_DISCONNECTED = 'Player has disconnected!',
   MESSAGE_RECEIVE = 'Received message: ',
   MESSAGE_SENT = 'Sent message: ',
-};
+}
