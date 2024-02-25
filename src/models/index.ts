@@ -1,3 +1,4 @@
+import { RoomType } from '../enums';
 import WebSocket from 'ws';
 
 export interface Player {
@@ -12,6 +13,7 @@ export interface Room {
   id: number;
   players: Player[];
   turn: number;
+  type: RoomType;
 }
 
 export type PlayerFields = Omit<Player, 'id' | 'wins'>;

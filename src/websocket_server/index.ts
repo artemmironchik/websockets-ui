@@ -3,6 +3,7 @@ import { WebSocketServer } from "ws";
 import register from '../handlers/player/registration.handler';
 import updateRoom from '../handlers/room/update.handler';
 import updateWinners from '../handlers/player/update-winners.handler';
+import createRoom from '../handlers/room/create.handler';
 import { getErrorResponse } from "../utils";
 import { ErrorMessage, LogMessage, MessageType } from "../enums";
 import { httpServer } from "../http_server";
@@ -42,6 +43,13 @@ wsServer.on('connection', (ws) => {
 
           break;
         case MessageType.CREATE_ROOM:
+          createRoom(ws);
+
+          const { response: updateRoomResponse } = updateRoom(id);
+
+          sendResponseToAllActive(updateRoomResponse);
+          console.log(LogMessage.MESSAGE_SENT, updateRoomResponse);
+
           break;
         case MessageType.ADD_USER_TO_ROOM:
           break;

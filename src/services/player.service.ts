@@ -4,7 +4,11 @@ import { isDeepStrictEqual } from "util";
 import { players } from "../database/db";
 import { PlayerFields, Player } from "../models";
 
+const getPlayers = (): Player[] => players;
+
 const createPlayer = (fields: PlayerFields): Player => {
+  const players = getPlayers();
+
   const newPlayer = {
     id: players.length,
     wins: 0,
@@ -15,8 +19,6 @@ const createPlayer = (fields: PlayerFields): Player => {
 
   return newPlayer;
 }
-
-const getPlayers = (): Player[] => players;
 
 const getPlayerByName = (name: string): Player | undefined => {
   return players.find((player) => player.name === name);
