@@ -44,3 +44,11 @@ export const getUpdateWinnersResponse = (id: number, data: any) => {
     id,
   });
 }
+
+export const getCreateGameResponse = (id: number, data: any) => {
+  return JSON.stringify({
+    type: MessageType.CREATE_GAME,
+    data: JSON.stringify(data),
+    id,
+  });
+}

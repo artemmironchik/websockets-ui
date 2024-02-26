@@ -23,7 +23,7 @@ const handler = (id: number, data: any, socket: WebSocket) => {
   if (player) {
     const { id: playerId, password: playerPassword } = player;
 
-    if (playerPassword !== password) {
+    if (playerPassword === password) {
       const response =
         getRegistrationResponse(id, name, playerId, true, ErrorMessage.PLAYER_EXISTS);
 

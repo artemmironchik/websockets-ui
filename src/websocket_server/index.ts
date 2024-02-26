@@ -4,6 +4,8 @@ import register from '../handlers/player/registration.handler';
 import updateRoom from '../handlers/room/update.handler';
 import updateWinners from '../handlers/player/update-winners.handler';
 import createRoom from '../handlers/room/create.handler';
+import addUserToRoom from '../handlers/room/add-user.handler';
+import createGame from '../handlers/game/create.handler';
 import { getErrorResponse } from "../utils";
 import { ErrorMessage, LogMessage, MessageType } from "../enums";
 import { httpServer } from "../http_server";
@@ -43,15 +45,34 @@ wsServer.on('connection', (ws) => {
 
           break;
         case MessageType.CREATE_ROOM:
-          createRoom(ws);
+          const createRoomResponse = createRoom(id, ws);
 
-          const { response: updateRoomResponse } = updateRoom(id);
-
-          sendResponseToAllActive(updateRoomResponse);
-          console.log(LogMessage.MESSAGE_SENT, updateRoomResponse);
+          if (createRoomResponse) {
+            ws.send(createRoomResponse.response);
+            console.log(LogMessage.MESSAGE_SENT, createRoomResponse.response);
+          } else {
+            const { response: updateRoomResponse } = updateRoom(id);
+  
+            sendResponseToAllActive(updateRoomResponse);
+            console.log(LogMessage.MESSAGE_SENT, updateRoomResponse);
+          }
 
           break;
         case MessageType.ADD_USER_TO_ROOM:
+          const { room, response: addUserResponse } = addUserToRoom(id, data, ws);
+
+          if (room) {
+            const { response: updateRoomAfterAddUserResponse } = updateRoom(id);
+  
+            sendResponseToAllActive(updateRoomAfterAddUserResponse);
+            console.log(LogMessage.MESSAGE_SENT, updateRoomAfterAddUserResponse);
+
+            createGame(id, room);
+          } else {
+            ws.send(addUserResponse);
+            console.log(LogMessage.MESSAGE_SENT, addUserResponse);
+          }
+
           break;
         case MessageType.ADD_SHIPS:
           break;
