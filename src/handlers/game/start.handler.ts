@@ -5,15 +5,14 @@ import { LogMessage, MessageType } from "../../enums";
 const handler = (id: number, room: Room) => {
   const players = room.players;
 
-  const currentPlayer =
-    room.players[Math.trunc(Math.random() * players.length)]?.id || 0;
+  const currentPlayer = room.players[Math.trunc(Math.random() * players.length)]?.id;
 
-  room.turn = currentPlayer;
+  room.turn = currentPlayer || 0;
 
   for (const player of players) {
     const startGameData = {
       ships: player.ships,
-      currentPlayerIndex: player.id,
+      currentPlayerIndex: currentPlayer,
     };
     const startGameResponse = getResponse(id, startGameData, MessageType.START_GAME);
 

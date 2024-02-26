@@ -16,7 +16,7 @@ const handler = (id: number, data: any) => {
     return { response };
   }
 
-  const player = room.players[indexPlayer];
+  const player = room.players.find((player) => player.id === indexPlayer);
 
   if (!player) {
     const response =

@@ -1,6 +1,6 @@
 import { getResponse } from "../../utils";
+import {  MessageType } from "../../enums";
 import { Player } from "../../models";
-import { MessageType } from "../../enums";
 
 const handler = (id: number, winner: Player, loser: Player) => {
   const data = {

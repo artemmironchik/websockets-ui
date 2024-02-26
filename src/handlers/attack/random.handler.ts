@@ -1,10 +1,10 @@
 import gameFinish from '../game/finish.handler';
-import { attackFunc, getErrorResponse, getResponse, isFieldHit } from "../../utils";
+import { attackFunc, getErrorResponse, getRandomField, getResponse } from "../../utils";
 import { AttackStatus, ErrorMessage, LogMessage, MessageType } from "../../enums";
 import { roomService } from "../../services/room.service";
 
 const handler = (id: number, data: any) => {
-  const { gameId, x, y, indexPlayer } = JSON.parse(data);
+  const { gameId, indexPlayer } = JSON.parse(data);
 
   const room = roomService.getRoom(gameId);
 
@@ -40,12 +40,7 @@ const handler = (id: number, data: any) => {
     return { error: response };
   }
 
-  if (isFieldHit({ x, y }, enemy)) {
-    const response =
-      getErrorResponse(id, ErrorMessage.FIELD_ALREADY_HIT);
-
-    return { error: response };
-  }
+  const { x, y } = getRandomField(enemy);
 
   const currentPlayer = room.turn
 

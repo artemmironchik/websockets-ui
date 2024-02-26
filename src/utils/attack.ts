@@ -32,15 +32,15 @@ export const markSurroundingFields = (ship: Ship, player: Player) => {
   const { x: shipX, y: shipY } = position;
 
   const startX = Math.max(shipX - 1, 0);
-  const endX = direction ? Math.min(shipX + 1, 10) : Math.min(shipX + length, 10);
+  const endX = direction ? Math.min(shipX + 1, 9) : Math.min(shipX + length, 9);
 
   const startY = Math.max(shipY - 1, 0);
-  const endY = direction ? Math.min(shipY + length, 10) : Math.min(shipY + 1, 10);
+  const endY = direction ? Math.min(shipY + length, 9) : Math.min(shipY + 1, 9);
 
   const fields = [];
 
-  for (let x = startX; x < endX; x++) {
-    for (let y = startY; y < endY; y++) {
+  for (let x = startX; x <= endX; x++) {
+    for (let y = startY; y <= endY; y++) {
       const newPos = { x, y };
 
       if (!isFieldHit(newPos, player)) {
@@ -63,11 +63,9 @@ export const attackFunc = (position: Hit, enemy: Player, room: Room) => {
   const hitShip = isShipHit(position, enemy);
 
   if (hitShip) {
-    let { hits, length } = hitShip;
+    hitShip.hits++;
 
-    hits++;
-
-    if (hits === length) {
+    if (hitShip.hits === hitShip.length) {
       status = AttackStatus.KILLED;
 
       enemy.ships = enemy.ships?.filter((ship) => !isDeepStrictEqual(ship, hitShip));
@@ -85,4 +83,15 @@ export const attackFunc = (position: Hit, enemy: Player, room: Room) => {
   }
 
   return { status, fields };
+}
+
+export const getRandomField = (player: Player) => {
+  while (true) {
+    const x = Math.trunc(Math.random() * 10);
+    const y = Math.trunc(Math.random() * 10);
+
+    if (!isFieldHit({ x, y }, player)) {
+      return { x, y };
+    }
+  }
 }

@@ -29,8 +29,13 @@ const getPlayerBySocket = (socket: WebSocket): Player | undefined => {
   return players.find((player) => isDeepStrictEqual(player.socket, socket));
 }
 
+const getPlayerById = (id: number): Player | undefined => {
+  return players.find((player) => player.id === id);
+}
+
 export const playerService = {
   createPlayer,
+  getPlayerById,
   getPlayerByName,
   getPlayerBySocket,
   getPlayers,

@@ -8,6 +8,7 @@ import addUserToRoom from '../handlers/room/add-user.handler';
 import createGame from '../handlers/game/create.handler';
 import addShips from '../handlers/game/add-ships.handler';
 import attackHandler from '../handlers/attack/attack.handler';
+import randomAttackHandler from '../handlers/attack/random.handler';
 import { getErrorResponse } from "../utils";
 import { ErrorMessage, LogMessage, MessageType } from "../enums";
 import { httpServer } from "../http_server";
@@ -93,10 +94,29 @@ wsServer.on('connection', (ws) => {
             console.log(LogMessage.MESSAGE_SENT, attackResponse.error);
           } else if (attackResponse?.finish) {
             console.log(attackResponse.finish);
+
+            const { response: updateWinnersAttackResponse } = updateWinners(id);
+
+            sendResponseToAllActive(updateWinnersAttackResponse);
+            console.log(LogMessage.MESSAGE_SENT, updateWinnersAttackResponse);
           }
 
           break;
         case MessageType.RANDOM_ATTACK:
+          const randomAttackResponse = randomAttackHandler(id, data);
+
+          if (randomAttackResponse?.error) {
+            ws.send(randomAttackResponse.error);
+            console.log(LogMessage.MESSAGE_SENT, randomAttackResponse.error);
+          } else if (randomAttackResponse?.finish) {
+            console.log(randomAttackResponse.finish);
+
+            const { response: updateWinnersRandomAttackResponse } = updateWinners(id);
+
+            sendResponseToAllActive(updateWinnersRandomAttackResponse);
+            console.log(LogMessage.MESSAGE_SENT, updateWinnersRandomAttackResponse);
+          }
+
           break;
         default:
           ws.send(getErrorResponse(id, `${ErrorMessage.INVALID_MESSAGE_TYPE}: ${type}`));
