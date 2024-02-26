@@ -12,6 +12,7 @@ const createPlayer = (fields: PlayerFields): Player => {
   const newPlayer = {
     id: players.length,
     wins: 0,
+    hits: [],
     ...fields,
   };
 

@@ -8,6 +8,7 @@ export interface Player {
   socket: WebSocket;
   wins: number;
   ships?: Ship[];
+  hits: Hit[];
 }
 
 export interface Room {
@@ -18,15 +19,17 @@ export interface Room {
 }
 
 export interface Ship {
-  position: {
-    x: number,
-    y: number,
-  },
+  position: Hit,
   direction: boolean,
   length: number,
   type: RoomType,
   hits: number,
 }
 
-export type PlayerFields = Omit<Player, 'id' | 'wins'>;
+export interface Hit {
+  x: number,
+  y: number,
+}
+
+export type PlayerFields = Omit<Player, 'id' | 'wins' | 'hits'>;
 

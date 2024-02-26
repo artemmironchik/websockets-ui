@@ -7,6 +7,7 @@ import createRoom from '../handlers/room/create.handler';
 import addUserToRoom from '../handlers/room/add-user.handler';
 import createGame from '../handlers/game/create.handler';
 import addShips from '../handlers/game/add-ships.handler';
+import attackHandler from '../handlers/attack/attack.handler';
 import { getErrorResponse } from "../utils";
 import { ErrorMessage, LogMessage, MessageType } from "../enums";
 import { httpServer } from "../http_server";
@@ -85,6 +86,15 @@ wsServer.on('connection', (ws) => {
 
           break;
         case MessageType.ATTACK:
+          const attackResponse = attackHandler(id, data);
+
+          if (attackResponse?.error) {
+            ws.send(attackResponse.error);
+            console.log(LogMessage.MESSAGE_SENT, attackResponse.error);
+          } else if (attackResponse?.finish) {
+            console.log(attackResponse.finish);
+          }
+
           break;
         case MessageType.RANDOM_ATTACK:
           break;
