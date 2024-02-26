@@ -149,8 +149,10 @@ wsServer.on('connection', (ws) => {
       const room = roomService.getRoomByPlayerId(player.id);
 
       if (room) {
-        if (room.players.length === 1) {
+        if (room.type === RoomType.SINGLE) {
           roomService.removeRoom(room.id);
+
+          playerService.removeBot(player.id);
         } else {
           const otherPlayer = room.players.find((roomPlayer) => player.id !== roomPlayer.id)!;
 
