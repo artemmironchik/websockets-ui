@@ -12,4 +12,5 @@ export enum MessageType {
   TURN = 'turn',
   FINISH = 'finish',
   ERROR = 'error',
+  SINGLE_PLAY = 'single_play',
 }

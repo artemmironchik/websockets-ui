@@ -10,7 +10,7 @@ import addShips from '../handlers/game/add-ships.handler';
 import attackHandler from '../handlers/attack/attack.handler';
 import randomAttackHandler from '../handlers/attack/random.handler';
 import { getErrorResponse } from "../utils";
-import { ErrorMessage, LogMessage, MessageType } from "../enums";
+import { ErrorMessage, LogMessage, MessageType, RoomType } from "../enums";
 import { httpServer } from "../http_server";
 import { playerService } from "../services/player.service";
 
@@ -50,7 +50,7 @@ wsServer.on('connection', (ws) => {
         case MessageType.CREATE_ROOM:
           const createRoomResponse = createRoom(id, ws);
 
-          if (createRoomResponse) {
+          if (createRoomResponse.response) {
             ws.send(createRoomResponse.response);
             console.log(LogMessage.MESSAGE_SENT, createRoomResponse.response);
           } else {
@@ -118,8 +118,20 @@ wsServer.on('connection', (ws) => {
           }
 
           break;
+        case MessageType.SINGLE_PLAY:
+          const createSingleRoomResponse = createRoom(id, ws, RoomType.SINGLE);
+
+          if (createSingleRoomResponse?.response) {
+            ws.send(createSingleRoomResponse.response);
+            console.log(LogMessage.MESSAGE_SENT, createSingleRoomResponse.response);
+          } else if (createSingleRoomResponse?.room) {
+            createGame(id, createSingleRoomResponse.room);
+          }
+
+          break;
         default:
           ws.send(getErrorResponse(id, `${ErrorMessage.INVALID_MESSAGE_TYPE}: ${type}`));
+          console.log(LogMessage.MESSAGE_SENT, `${ErrorMessage.INVALID_MESSAGE_TYPE}: ${type}`);
 
           break;
       }

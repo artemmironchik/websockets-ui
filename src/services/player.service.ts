@@ -33,7 +33,22 @@ const getPlayerById = (id: number): Player | undefined => {
   return players.find((player) => player.id === id);
 }
 
+const createBot = (id: number): Player => {
+  const newPlayer = {
+    id: -(id + 1),
+    name: `Bot ${id}`,
+    password: '',
+    wins: 0,
+    hits: [],
+  };
+
+  players.push(newPlayer);
+
+  return newPlayer;
+}
+
 export const playerService = {
+  createBot,
   createPlayer,
   getPlayerById,
   getPlayerByName,

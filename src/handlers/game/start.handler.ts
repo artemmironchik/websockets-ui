@@ -1,11 +1,13 @@
 import { getResponse } from "../../utils";
 import { Room } from "../../models";
-import { LogMessage, MessageType } from "../../enums";
+import { LogMessage, MessageType, RoomType } from "../../enums";
 
 const handler = (id: number, room: Room) => {
   const players = room.players;
 
-  const currentPlayer = room.players[Math.trunc(Math.random() * players.length)]?.id;
+  const currentPlayer = room.type === RoomType.SINGLE
+    ? room.players[0]!.id
+    : room.players[Math.trunc(Math.random() * players.length)]?.id;
 
   room.turn = currentPlayer || 0;
 
@@ -21,10 +23,10 @@ const handler = (id: number, room: Room) => {
     }
     const turnResponse = getResponse(id, turnData, MessageType.TURN);
 
-    player.socket.send(startGameResponse);
+    player.socket!.send(startGameResponse);
     console.log(LogMessage.MESSAGE_SENT, startGameResponse);
 
-    player.socket.send(turnResponse);
+    player.socket!.send(turnResponse);
     console.log(LogMessage.MESSAGE_SENT, turnResponse);
   }
 }

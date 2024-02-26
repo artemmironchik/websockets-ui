@@ -12,7 +12,7 @@ const handler = (id: number, room: Room) => {
     };
     const response = getResponse(id, data, MessageType.CREATE_GAME);
 
-    player.socket.send(response);
+    player.socket!.send(response);
     console.log(LogMessage.MESSAGE_SENT, response);
   }
 }

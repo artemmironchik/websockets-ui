@@ -67,8 +67,11 @@ const handler = (id: number, data: any) => {
     const turnResponse = getResponse(id, { currentPlayer: room.turn }, MessageType.TURN);
     const attackResponse = getResponse(id, attackData, MessageType.ATTACK);
 
-    player.socket.send(attackResponse);
-    enemy.socket.send(attackResponse);
+    player.socket!.send(attackResponse);
+
+    if (enemy.socket) {
+      enemy.socket.send(attackResponse);
+    }
 
     console.log(LogMessage.MESSAGE_SENT, attackResponse);
 
@@ -84,15 +87,21 @@ const handler = (id: number, data: any) => {
         };
         const attackResponse = getResponse(id, attackData, MessageType.ATTACK);
 
-        player.socket.send(attackResponse);
-        enemy.socket.send(attackResponse);
+        player.socket!.send(attackResponse);
+
+        if (enemy.socket) {
+          enemy.socket.send(attackResponse);
+        }
 
         console.log(LogMessage.MESSAGE_SENT, attackResponse);
       })
     }
 
-    player.socket.send(turnResponse);
-    enemy.socket.send(turnResponse);
+    player.socket!.send(turnResponse);
+
+    if (enemy.socket) {
+      enemy.socket.send(turnResponse);
+    }
 
     console.log(LogMessage.MESSAGE_SENT, turnResponse);
   }

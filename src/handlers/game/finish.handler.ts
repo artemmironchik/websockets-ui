@@ -8,8 +8,11 @@ const handler = (id: number, winner: Player, loser: Player) => {
   }
   const response = getResponse(id, data, MessageType.FINISH);
 
-  winner.socket.send(response);
-  loser.socket.send(response);
+  winner.socket!.send(response);
+
+  if (loser.socket) {
+    loser.socket.send(response);
+  }
 
   loser.hits = [];
   loser.ships = [];

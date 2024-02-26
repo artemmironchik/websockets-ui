@@ -1,11 +1,11 @@
-import { RoomType } from '../enums';
+import { RoomType, ShipType } from '../enums';
 import WebSocket from 'ws';
 
 export interface Player {
   id: number;
   name: string;
   password: string;
-  socket: WebSocket;
+  socket?: WebSocket;
   wins: number;
   ships?: Ship[];
   hits: Hit[];
@@ -22,7 +22,7 @@ export interface Ship {
   position: Hit,
   direction: boolean,
   length: number,
-  type: RoomType,
+  type: ShipType,
   hits: number,
 }
 

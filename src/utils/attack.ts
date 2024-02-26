@@ -87,8 +87,8 @@ export const attackFunc = (position: Hit, enemy: Player, room: Room) => {
 
 export const getRandomField = (player: Player) => {
   while (true) {
-    const x = Math.trunc(Math.random() * 10);
-    const y = Math.trunc(Math.random() * 10);
+    const x = Math.floor(Math.random() * 10);
+    const y = Math.floor(Math.random() * 10);
 
     if (!isFieldHit({ x, y }, player)) {
       return { x, y };

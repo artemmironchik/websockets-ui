@@ -11,6 +11,14 @@ const handler = (id: number, socket: WebSocket, type: RoomType = RoomType.MULTI)
 
   if (player) {
     roomService.addPlayerToTheRoom(room.id, player);
+
+    if (type === RoomType.SINGLE) {
+      const bot = playerService.createBot(player.id);
+
+      roomService.addPlayerToTheRoom(room.id, bot);
+    }
+
+    return { room };
   } else {
     const response =
       getErrorResponse(id, ErrorMessage.NO_PLAYER_FOUND);
