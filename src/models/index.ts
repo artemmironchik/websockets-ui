@@ -7,6 +7,7 @@ export interface Player {
   password: string;
   socket: WebSocket;
   wins: number;
+  ships?: Ship[];
 }
 
 export interface Room {
@@ -14,6 +15,17 @@ export interface Room {
   players: Player[];
   turn: number;
   type: RoomType;
+}
+
+export interface Ship {
+  position: {
+    x: number,
+    y: number,
+  },
+  direction: boolean,
+  length: number,
+  type: RoomType,
+  hits: number,
 }
 
 export type PlayerFields = Omit<Player, 'id' | 'wins'>;

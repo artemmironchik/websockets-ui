@@ -29,25 +29,9 @@ export const getRegistrationResponse = (
   });
 }
 
-export const getUpdateRoomResponse = (id: number, data: any) => {
+export const getResponse = (id: number, data: any, type: MessageType) => {
   return JSON.stringify({
-    type: MessageType.UPDATE_ROOM,
-    data: JSON.stringify(data),
-    id,
-  });
-}
-
-export const getUpdateWinnersResponse = (id: number, data: any) => {
-  return JSON.stringify({
-    type: MessageType.UPDATE_WINNERS,
-    data: JSON.stringify(data),
-    id,
-  });
-}
-
-export const getCreateGameResponse = (id: number, data: any) => {
-  return JSON.stringify({
-    type: MessageType.CREATE_GAME,
+    type,
     data: JSON.stringify(data),
     id,
   });

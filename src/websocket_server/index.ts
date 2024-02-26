@@ -6,6 +6,7 @@ import updateWinners from '../handlers/player/update-winners.handler';
 import createRoom from '../handlers/room/create.handler';
 import addUserToRoom from '../handlers/room/add-user.handler';
 import createGame from '../handlers/game/create.handler';
+import addShips from '../handlers/game/add-ships.handler';
 import { getErrorResponse } from "../utils";
 import { ErrorMessage, LogMessage, MessageType } from "../enums";
 import { httpServer } from "../http_server";
@@ -75,6 +76,13 @@ wsServer.on('connection', (ws) => {
 
           break;
         case MessageType.ADD_SHIPS:
+          const addShipsResponse = addShips(id, data);
+
+          if (addShipsResponse) {
+            ws.send(addShipsResponse.response);
+            console.log(LogMessage.MESSAGE_SENT, addShipsResponse.response);
+          }
+
           break;
         case MessageType.ATTACK:
           break;

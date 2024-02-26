@@ -1,5 +1,6 @@
-import { getUpdateWinnersResponse } from "../../utils";
+import { getResponse } from "../../utils";
 import { playerService } from "../../services/player.service";
+import { MessageType } from "../../enums";
 
 const handler = (id: number) => {
   const winners = playerService
@@ -9,7 +10,7 @@ const handler = (id: number) => {
       wins,
     }))
   
-  const response = getUpdateWinnersResponse(id, winners);
+  const response = getResponse(id, winners, MessageType.UPDATE_WINNERS);
 
   return { response };
 }

@@ -1,5 +1,6 @@
-import { getUpdateRoomResponse } from "../../utils";
+import { getResponse } from "../../utils";
 import { roomService } from "../../services/room.service";
+import { MessageType } from "../../enums";
 
 const handler = (id: number) => {
   const availableRooms = roomService
@@ -13,7 +14,7 @@ const handler = (id: number) => {
       }))
     }))
   
-  const response = getUpdateRoomResponse(id, availableRooms);
+  const response = getResponse(id, availableRooms, MessageType.UPDATE_ROOM);
 
   return { response };
 }
