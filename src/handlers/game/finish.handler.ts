@@ -1,8 +1,9 @@
 import { getResponse } from "../../utils";
 import {  MessageType } from "../../enums";
 import { Player } from "../../models";
+import { roomService } from "../../services/room.service";
 
-const handler = (id: number, winner: Player, loser: Player) => {
+const handler = (id: number, winner: Player, loser: Player, roomId: number) => {
   const data = {
     winPlayer: winner.id,
   }
@@ -20,6 +21,8 @@ const handler = (id: number, winner: Player, loser: Player) => {
   winner.hits = [];
   winner.ships = [];
   winner.wins++;
+
+  roomService.removeRoom(roomId);
 
   return response;
 }

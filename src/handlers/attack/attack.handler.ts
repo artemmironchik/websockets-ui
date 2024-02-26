@@ -52,7 +52,13 @@ const handler = (id: number, data: any) => {
   const attackUtilResponse = attackFunc({ x, y }, enemy, room);
 
   if (attackUtilResponse.isFinish) {
-    const gameFinishResponse = gameFinish(id, player, enemy);
+    const gameFinishResponse = gameFinish(id, player, enemy, room.id);
+
+    player.socket!.send(gameFinishResponse);
+
+    if (enemy.socket) {
+      enemy.socket.send(gameFinishResponse);
+    }
 
     return { finish: gameFinishResponse };
   } else if (attackUtilResponse.status) {

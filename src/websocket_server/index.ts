@@ -9,10 +9,12 @@ import createGame from '../handlers/game/create.handler';
 import addShips from '../handlers/game/add-ships.handler';
 import attackHandler from '../handlers/attack/attack.handler';
 import randomAttackHandler from '../handlers/attack/random.handler';
+import gameFinish from '../handlers/game/finish.handler';
 import { getErrorResponse } from "../utils";
 import { ErrorMessage, LogMessage, MessageType, RoomType } from "../enums";
 import { httpServer } from "../http_server";
 import { playerService } from "../services/player.service";
+import { roomService } from "../services/room.service";
 
 export const wsServer = new WebSocketServer({ server: httpServer });
 
@@ -109,7 +111,7 @@ wsServer.on('connection', (ws) => {
             ws.send(randomAttackResponse.error);
             console.log(LogMessage.MESSAGE_SENT, randomAttackResponse.error);
           } else if (randomAttackResponse?.finish) {
-            console.log(randomAttackResponse.finish);
+            console.log(LogMessage.MESSAGE_SENT, randomAttackResponse.finish);
 
             const { response: updateWinnersRandomAttackResponse } = updateWinners(id);
 
@@ -140,7 +142,40 @@ wsServer.on('connection', (ws) => {
     }
   });
 
-  ws.on('close', () => console.log(LogMessage.PLAYER_DISCONNECTED));
+  ws.on('close', () => {
+    const player = playerService.getPlayerBySocket(ws);
+
+    if (player) {
+      const room = roomService.getRoomByPlayerId(player.id);
+
+      if (room) {
+        if (room.players.length === 1) {
+          roomService.removeRoom(room.id);
+        } else {
+          const otherPlayer = room.players.find((roomPlayer) => player.id !== roomPlayer.id)!;
+
+          const response = gameFinish(0, otherPlayer, player, room.id);
+
+          player.socket!.send(response);
+          otherPlayer.socket!.send(response);
+        }
+      }
+
+      playerService.removePlayer(player.id);
+
+      const { response: updateRoomResponse } = updateRoom(0);
+  
+      sendResponseToAllActive(updateRoomResponse);
+      console.log(LogMessage.MESSAGE_SENT, updateRoomResponse);
+
+      const { response: updateWinnersResponse } = updateWinners(0);
+
+      sendResponseToAllActive(updateWinnersResponse);
+      console.log(LogMessage.MESSAGE_SENT, updateWinnersResponse);
+    }
+    
+    console.log(LogMessage.PLAYER_DISCONNECTED);
+  });
 })
 
 const sendResponseToAllActive = (response: any) => {

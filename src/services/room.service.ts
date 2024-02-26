@@ -31,9 +31,23 @@ const addPlayerToTheRoom = (id: number, player: Player): void => {
   }
 }
 
+const removeRoom = (id: number) => {
+  const index = rooms.findIndex((room) => room.id === id);
+
+  if (index !== -1) {
+    rooms.splice(index, 1);
+  }
+}
+
+const getRoomByPlayerId = (id: number) => {
+  return rooms.find((room) => room.players.some((player) => player.id === id));
+}
+
 export const roomService = {
   addPlayerToTheRoom,
   createRoom,
   getRoom,
+  getRoomByPlayerId,
   getRooms,
+  removeRoom,
 }

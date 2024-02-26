@@ -47,6 +47,14 @@ const createBot = (id: number): Player => {
   return newPlayer;
 }
 
+const removePlayer = (id: number) => {
+  const index = players.findIndex((player) => player.id === id);
+
+  if (index !== -1) {
+    players.splice(index, 1);
+  }
+}
+
 export const playerService = {
   createBot,
   createPlayer,
@@ -54,4 +62,5 @@ export const playerService = {
   getPlayerByName,
   getPlayerBySocket,
   getPlayers,
+  removePlayer,
 }
