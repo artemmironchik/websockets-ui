@@ -7,4 +7,5 @@ export enum ErrorMessage {
   NO_PLAYER_FOUND = 'No player found',
   NOT_PLAYER_TURN_TO_HIT = 'Not your turn to hit',
   FIELD_ALREADY_HIT = 'This field has already been hit',
+  CANT_JOIN_YOUR_ROOM = "You can't join your room",
 }

@@ -1,4 +1,5 @@
 import { WebSocket } from "ws";
+import { isDeepStrictEqual } from "util";
 
 import { getErrorResponse } from "../../utils";
 import { ErrorMessage } from "../../enums";
@@ -25,6 +26,13 @@ const handler = (id: number, data: any, socket: WebSocket) => {
   }
 
   const player = playerService.getPlayerBySocket(socket);
+
+  if (room.players.find((roomPlayer) => isDeepStrictEqual(roomPlayer, player))) {
+    const response =
+      getErrorResponse(id, ErrorMessage.CANT_JOIN_YOUR_ROOM);
+
+    return { response };
+  }
 
   if (player) {
     roomService.addPlayerToTheRoom(id, player);
